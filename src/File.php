@@ -254,36 +254,26 @@ class File
         switch ($file['error']) {
             case UPLOAD_ERR_OK:
                 return $this->setUploadedFile($file['tmp_name']);
-
+                break;
             case UPLOAD_ERR_NO_FILE:
                 break;
-            case UPLOAD_ERR_INI_SIZE:
-                $this->errorMessage = Message::error(__(
-                    'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
-                ));
-                break;
-            case UPLOAD_ERR_FORM_SIZE:
-                $this->errorMessage = Message::error(__(
-                    'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
-                ));
-                break;
-            case UPLOAD_ERR_PARTIAL:
-                $this->errorMessage = Message::error(__(
-                    'The uploaded file was only partially uploaded.',
-                ));
-                break;
-            case UPLOAD_ERR_NO_TMP_DIR:
-                $this->errorMessage = Message::error(__('Missing a temporary folder.'));
-                break;
-            case UPLOAD_ERR_CANT_WRITE:
-                $this->errorMessage = Message::error(__('Failed to write file to disk.'));
-                break;
-            case UPLOAD_ERR_EXTENSION:
-                $this->errorMessage = Message::error(__('File upload stopped by extension.'));
-                break;
-            default:
-                $this->errorMessage = Message::error(__('Unknown error in file upload.'));
         }
+
+        $this->errorMessage = match ($file['error']) {
+            UPLOAD_ERR_INI_SIZE => Message::error(__(
+                'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+            )),
+            UPLOAD_ERR_FORM_SIZE => Message::error(__(
+                'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+            )),
+            UPLOAD_ERR_PARTIAL => Message::error(__(
+                'The uploaded file was only partially uploaded.',
+            )),
+            UPLOAD_ERR_NO_TMP_DIR => Message::error(__('Missing a temporary folder.')),
+            UPLOAD_ERR_CANT_WRITE => Message::error(__('Failed to write file to disk.')),
+            UPLOAD_ERR_EXTENSION => Message::error(__('File upload stopped by extension.')),
+            default => Message::error(__('Unknown error in file upload.')),
+        };
 
         return false;
     }

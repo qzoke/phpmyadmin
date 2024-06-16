@@ -372,31 +372,23 @@ final class ColumnsDefinition
     {
         $metaDefault = ['DefaultType' => 'USER_DEFINED', 'DefaultValue' => ''];
 
-        switch ($default) {
-            case null:
-                $metaDefault['DefaultType'] = $isNull ? 'NULL' : 'NONE';
+        $supportedTypes = [null, 'CURRENT_TIMESTAMP','current_timestamp()', 'UUID','uuid()'];
 
-                break;
-            case 'CURRENT_TIMESTAMP':
-            case 'current_timestamp()':
-                $metaDefault['DefaultType'] = 'CURRENT_TIMESTAMP';
+        if (in_array($default, $supportedTypes, true)) {
+            $metaDefault['DefaultType'] = match($default){
+                null => $isNull ? 'NULL' : 'NONE',
+                'CURRENT_TIMESTAMP','current_timestamp()' => 'CURRENT_TIMESTAMP',
+                'UUID','uuid()' => 'UUID',
+            };
+        } else {
+            $metaDefault['DefaultValue'] = $default;
 
-                break;
-            case 'UUID':
-            case 'uuid()':
-                $metaDefault['DefaultType'] = 'UUID';
-
-                break;
-            default:
-                $metaDefault['DefaultValue'] = $default;
-
-                if (str_ends_with($type, 'text')) {
-                    $textDefault = substr($default, 1, -1);
-                    $metaDefault['Default'] = stripcslashes($textDefault);
-                }
-
-                break;
+            if (str_ends_with($type, 'text')) {
+                $textDefault = substr($default, 1, -1);
+                $metaDefault['Default'] = stripcslashes($textDefault);
+            }
         }
+
 
         return $metaDefault;
     }

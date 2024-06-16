@@ -182,34 +182,25 @@ class ImportShp extends ImportPlugin
             return [];
         }
 
-        switch ($shp->shapeType) {
-            // ESRI Null Shape
-            case 0:
-                break;
-            // ESRI Point
-            case 1:
-                $gisType = 'point';
-                break;
-            // ESRI PolyLine
-            case 3:
-                $gisType = 'multilinestring';
-                break;
-            // ESRI Polygon
-            case 5:
-                $gisType = 'multipolygon';
-                break;
-            // ESRI MultiPoint
-            case 8:
-                $gisType = 'multipoint';
-                break;
-            default:
-                $GLOBALS['error'] = true;
-                $GLOBALS['message'] = Message::error(
-                    __('MySQL Spatial Extension does not support ESRI type "%s".'),
-                );
-                $GLOBALS['message']->addParam($shp->getShapeName());
+        $supportedTypes = [1, 3, 5, 8];
 
-                return [];
+        if (in_array($shp->shapeType, $supportedTypes)) {
+            $gisType = match ($shp->shapeType) {
+                0 => 'null',
+                1 => 'point',
+                3 => 'multilinestring',
+                5 => 'multipolygon',
+                8 => 'multipoint',
+                default => null,
+            };
+        } else {
+            $GLOBALS['error'] = true;
+            $GLOBALS['message'] = Message::error(
+                __('MySQL Spatial Extension does not support ESRI type "%s".'),
+            );
+            $GLOBALS['message']->addParam($shp->getShapeName());
+
+            return [];
         }
 
         if (isset($gisType)) {

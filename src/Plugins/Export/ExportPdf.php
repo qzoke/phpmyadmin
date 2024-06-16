@@ -239,23 +239,18 @@ class ExportPdf extends ExportPlugin
     ): bool {
         $dbAlias = $db;
         $tableAlias = $table;
-        $purpose = '';
+        // $purpose = '';
         $this->initAlias($aliases, $dbAlias, $tableAlias);
         $pdf = $this->getPdf();
         // getting purpose to show at top
-        switch ($exportMode) {
-            case 'create_table':
-                $purpose = __('Table structure');
-                break;
-            case 'triggers':
-                $purpose = __('Triggers');
-                break;
-            case 'create_view':
-                $purpose = __('View structure');
-                break;
-            case 'stand_in':
-                $purpose = __('Stand in');
-        }
+
+        $purpose = match ($exportMode) {
+            'create_table' =>  __('Table structure'),
+            'triggers' =>  __('Triggers'),
+            'create_view' =>  __('View structure'),
+            'stand_in' =>  __('Stand in'),
+            default => '',
+        };
 
         $pdf->setCurrentDb($db);
         $pdf->setCurrentTable($table);

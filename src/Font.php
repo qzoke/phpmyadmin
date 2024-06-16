@@ -122,25 +122,14 @@ class Font
         //all other chars
         $count += mb_strlen((string) preg_replace('/[a-z0-9]/i', '', $text)) * 0.3;
 
-        $modifier = 1;
         $font = mb_strtolower($font);
-        switch ($font) {
-            case 'arial':
-            case 'sans-serif':
-                // no modifier for arial and sans-serif
-                break;
-            case 'times':
-            case 'serif':
-            case 'brushscriptstd':
-            case 'californian fb':
-                // .92 modifier for time, serif, brushscriptstd, and californian fb
-                $modifier = .92;
-                break;
-            case 'broadway':
-                // 1.23 modifier for broadway
-                $modifier = 1.23;
-                break;
-        }
+
+        $modifier = match ($font) {
+            'arial', 'sans-serif' => 1,
+            'times', 'serif', 'brushscriptstd', 'californian fb' => 0.92,
+            'broadway' => 1.23,
+            default => 1,
+        };
 
         $textWidth = $count * $fontSize;
 

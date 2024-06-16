@@ -119,22 +119,14 @@ class VersionInformation
                 $result += (int) $matches[2];
             }
 
-            switch ($suffix) {
-                case 'pl':
-                    $result += 60;
-                    break;
-                case 'rc':
-                    $result += 30;
-                    break;
-                case 'beta':
-                    $result += 20;
-                    break;
-                case 'alpha':
-                    $result += 10;
-                    break;
-                case 'dev':
-                    break;
-            }
+            $result = match($suffix){
+                'pl' => $result + 60,
+                'rc' => $result + 30,
+                'beta' => $result + 20,
+                'alpha' => $result + 10,
+                'dev' => $result,
+                default => $result,
+            };
         } else {
             $result += 50; // for final
         }

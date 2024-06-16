@@ -352,27 +352,24 @@ class FormDisplay
             $opts['errors'] = $this->errors[$workPath];
         }
 
-        $type = '';
-        switch ($form->getOptionType($field)) {
-            case 'string':
-                $type = 'text';
-                break;
-            case 'short_string':
-                $type = 'short_text';
-                break;
-            case 'double':
-            case 'integer':
-                $type = 'number_text';
-                break;
-            case 'boolean':
-                $type = 'checkbox';
-                break;
+        $formOptionType = $form->getOptionType($field);
+        $type = match($formOptionType){
+            'string' => 'text',
+            'short_string' => 'short_text',
+            'double', 'integer' => 'number_text',
+            'boolean' => 'checkbox',
+            'select' => 'select',
+            'array' => 'list',
+            default => '',
+        };
+
+
+        switch ($formOptionType) {
+
             case 'select':
-                $type = 'select';
                 $opts['values'] = $form->getOptionValueList($form->fields[$field]);
                 break;
             case 'array':
-                $type = 'list';
                 $value = (array) $value;
                 $valueDefault = (array) $valueDefault;
                 break;
@@ -386,12 +383,10 @@ class FormDisplay
                 } else {
                     $this->formDisplayTemplate->displayGroupFooter();
                 }
-
                 return $htmlOutput;
 
             case 'NULL':
                 trigger_error('Field ' . $systemPath . ' has no type', E_USER_WARNING);
-
                 return null;
         }
 

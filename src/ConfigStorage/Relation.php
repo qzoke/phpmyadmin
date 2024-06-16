@@ -467,13 +467,10 @@ class Relation
          * Emulating the display field for some information_schema tables.
          */
         if ($db === 'information_schema') {
-            switch ($table) {
-                case 'CHARACTER_SETS':
-                    return 'DESCRIPTION';
-
-                case 'TABLES':
-                    return 'TABLE_COMMENT';
-            }
+            return match ($table){
+                'CHARACTER_SETS' => 'DESCRIPTION',
+                'TABLES' => 'TABLE_COMMENT',
+            };
         }
 
         /**

@@ -423,24 +423,20 @@ class ReplicationGui
             $result = $this->handleRequestForReplicaServerControl($srReplicaAction, $srReplicaControlParam);
             $refresh = true;
 
-            switch ($srReplicaAction) {
-                case 'start':
-                    $messageSuccess = __('Replication started successfully.');
-                    $messageError = __('Error starting replication.');
-                    break;
-                case 'stop':
-                    $messageSuccess = __('Replication stopped successfully.');
-                    $messageError = __('Error stopping replication.');
-                    break;
-                case 'reset':
-                    $messageSuccess = __('Replication resetting successfully.');
-                    $messageError = __('Error resetting replication.');
-                    break;
-                default:
-                    $messageSuccess = __('Success.');
-                    $messageError = __('Error.');
-                    break;
-            }
+            $messageSuccess = match($srReplicaAction){
+                'start' =>  __('Replication started successfully.'),
+                'stop' => __('Replication stopped successfully.'),
+                'reset' => __('Replication resetting successfully.'),
+                default => __('Success.'),
+            };
+
+            $messageError = match($srReplicaAction){
+                'start' =>  __('Error starting replication.'),
+                'stop' => __('Error stopping replication.'),
+                'reset' => __('Error resetting replication.'),
+                default => __('Error.'),
+            };
+            
         } elseif ($srReplicaSkipError) {
             $result = $this->handleRequestForReplicaSkipError($srSkipErrorsCount);
         }

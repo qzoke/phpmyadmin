@@ -304,9 +304,9 @@ final class Collation
         $found = true;
 
         $name = match ($part) {
-            // 'general' => null,
+            // 'general' => $name,
             'bulgarian', 'bg' => _pgettext('Collation', 'Bulgarian'),
-            // 'chinese', 'cn', 'zh' => $unicode ? _pgettext('Collation', 'Chinese') : null,
+            // 'chinese', 'cn', 'zh' => $unicode ? _pgettext('Collation', 'Chinese') : $name,
             'croatian', 'hr' => _pgettext('Collation', 'Croatian'),
             'czech', 'cs' => _pgettext('Collation', 'Czech'),
             'danish', 'da' => _pgettext('Collation', 'Danish'),
@@ -315,7 +315,7 @@ final class Collation
             'estonian', 'et' => _pgettext('Collation', 'Estonian'),
             'german1' => _pgettext('Collation', 'German (dictionary order)'),
             'german2' => _pgettext('Collation', 'German (phone book order)'),
-            // 'german', 'de' => null, /* Name is set later */
+            // 'german', 'de' => $name, /* Name is set later */
             'hungarian', 'hu' => _pgettext('Collation', 'Hungarian'),
             'icelandic', 'is' => _pgettext('Collation', 'Icelandic'),
             'japanese', 'ja' => _pgettext('Collation', 'Japanese'),
@@ -333,15 +333,15 @@ final class Collation
             'slovak', 'sk' => _pgettext('Collation', 'Slovak'),
             'slovenian', 'sl' => _pgettext('Collation', 'Slovenian'),
             'spanish' => _pgettext('Collation', 'Spanish (modern)'),
-            // 'es' => null,/* Name is set later */
+            // 'es' => $name,/* Name is set later */
             'spanish2' => _pgettext('Collation', 'Spanish (traditional)'),
             'swedish', 'sv' => _pgettext('Collation', 'Swedish'),
             'thai', 'th' => _pgettext('Collation', 'Thai'),
             'turkish', 'tr' => _pgettext('Collation', 'Turkish'),
             'ukrainian', 'uk' => _pgettext('Collation', 'Ukrainian'),
             'vietnamese', 'vi' => _pgettext('Collation', 'Vietnamese'),
-            //'unicode' => $unknown ? _pgettext('Collation', 'Unicode') : null,
-            // default => null, /* $found = false; is implemented using in_array */
+            //'unicode' => $unknown ? _pgettext('Collation', 'Unicode') : $name,
+             default => $name, /* $found = false; is implemented using in_array */
         };
 
         switch ($part) {

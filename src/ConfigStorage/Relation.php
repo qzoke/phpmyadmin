@@ -470,6 +470,7 @@ class Relation
             return match ($table){
                 'CHARACTER_SETS' => 'DESCRIPTION',
                 'TABLES' => 'TABLE_COMMENT',
+                default => null,
             };
         }
 

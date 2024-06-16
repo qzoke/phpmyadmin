@@ -251,15 +251,14 @@ class File
 
         $file = $this->fetchUploadedFromTblChangeRequestMultiple($_FILES['fields_upload'], $rownumber, $key);
 
-        switch ($file['error']) {
-            case UPLOAD_ERR_OK:
-                return $this->setUploadedFile($file['tmp_name']);
-                break;
-            case UPLOAD_ERR_NO_FILE:
-                break;
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            // file uploading successfully done.
+            return $this->setUploadedFile($file['tmp_name']);
         }
 
         $this->errorMessage = match ($file['error']) {
+
+            UPLOAD_ERR_NO_FILE => Message::error(__('No file was uploaded.')),
             UPLOAD_ERR_INI_SIZE => Message::error(__(
                 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
             )),

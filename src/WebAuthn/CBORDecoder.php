@@ -165,36 +165,22 @@ final class CBORDecoder
         int $value,
         int $additionalInformation,
     ): int|bool|float|null {
-        switch ($additionalInformation) {
-            case 20:
-                return true;
 
-            case 21:
-                return false;
-
-            case 22:
-                return null;
-
-            case 24:
-                // simple value
-                return ord($stream->take(1));
-
-            case 25:
-                return $this->getHalfFloat($stream);
-
-            case 26:
-                return $this->getSingleFloat($stream);
-
-            case 27:
-                return $this->getDoubleFloat($stream);
-
-            case 31:
-                // "break" stop code for indefinite-length items
-                throw new WebAuthnException();
-
-            default:
-                return $value;
+        if($additionalInformation === 31){
+            throw new WebAuthnException();
         }
+
+        return match($additionalInformation) {
+            20 => true,
+            21 => false,
+            22 => null,
+            24 => ord($stream->take(1)),
+            25 => $this->getHalfFloat($stream),
+            26 => $this->getSingleFloat($stream),
+            27 => $this->getDoubleFloat($stream),
+            default => $value,
+        };
+
     }
 
     /**

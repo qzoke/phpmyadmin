@@ -399,126 +399,65 @@ class Types
         $isMariaDB = $this->dbi->isMariaDB();
         $serverVersion = $this->dbi->getVersion();
 
+
+        $CLASS_CHAR = [
+            'AES_DECRYPT', 'AES_ENCRYPT', 'BIN', 'CHAR', 'COMPRESS', 'CURRENT_USER',
+            'DATABASE', 'DAYNAME', 'DES_DECRYPT', 'DES_ENCRYPT', 'ENCRYPT', 'HEX',
+            'INET6_NTOA', 'INET_NTOA', 'LOAD_FILE', 'LOWER', 'LTRIM', 'MD5',
+            'MONTHNAME', 'OLD_PASSWORD', 'PASSWORD', 'QUOTE', 'REVERSE', 'RTRIM',
+            'SHA1', 'SHA2', 'SOUNDEX', 'SPACE', 'TRIM', 'UNCOMPRESS', 'UNHEX',
+            'UPPER', 'USER', 'UUID', 'VERSION',
+        ];
+
+        $CLASS_DATE = [
+            'CURRENT_DATE', 'CURRENT_TIME', 'DATE', 'FROM_DAYS', 'FROM_UNIXTIME',
+            'LAST_DAY', 'NOW', 'SEC_TO_TIME', 'SYSDATE', 'TIME', 'TIMESTAMP',
+            'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP', 'YEAR',
+        ];
+
+        $CLASS_NUMBER = [
+            'ABS', 'ACOS', 'ASCII', 'ASIN', 'ATAN', 'BIT_LENGTH', 'BIT_COUNT',
+            'CEILING', 'CHAR_LENGTH', 'CONNECTION_ID', 'COS', 'COT', 'CRC32',
+            'DAYOFMONTH', 'DAYOFWEEK', 'DAYOFYEAR', 'DEGREES', 'EXP', 'FLOOR',
+            'HOUR', 'INET6_ATON', 'INET_ATON', 'LENGTH', 'LN', 'LOG', 'LOG2',
+            'LOG10', 'MICROSECOND', 'MINUTE', 'MONTH', 'OCT', 'ORD', 'PI',
+            'QUARTER', 'RADIANS', 'RAND', 'ROUND', 'SECOND', 'SIGN', 'SIN',
+            'SQRT', 'TAN', 'TO_DAYS', 'TO_SECONDS', 'TIME_TO_SEC',
+            'UNCOMPRESSED_LENGTH', 'UNIX_TIMESTAMP', 'UUID_SHORT', 'WEEK',
+            'WEEKDAY', 'WEEKOFYEAR', 'YEARWEEK',
+        ];
+
+        $CLASS_SPATIAL_NEW = [
+            'ST_GeomFromText', 'ST_GeomFromWKB', 'ST_GeomCollFromText',
+            'ST_LineFromText', 'ST_MLineFromText', 'ST_PointFromText',
+            'ST_MPointFromText', 'ST_PolyFromText', 'ST_MPolyFromText',
+            'ST_GeomCollFromWKB', 'ST_LineFromWKB', 'ST_MLineFromWKB',
+            'ST_PointFromWKB', 'ST_MPointFromWKB', 'ST_PolyFromWKB',
+            'ST_MPolyFromWKB',
+        ];
+
+        $CLASS_SPATIAL_OLD = [
+            'GeomFromText', 'GeomFromWKB', 'GeomCollFromText', 'LineFromText',
+            'MLineFromText', 'PointFromText', 'MPointFromText', 'PolyFromText',
+            'MPolyFromText', 'GeomCollFromWKB', 'LineFromWKB', 'MLineFromWKB',
+            'PointFromWKB', 'MPointFromWKB', 'PolyFromWKB', 'MPolyFromWKB',
+        ];
+
         switch ($class) {
             case 'CHAR':
-                $ret = [
-                    'AES_DECRYPT',
-                    'AES_ENCRYPT',
-                    'BIN',
-                    'CHAR',
-                    'COMPRESS',
-                    'CURRENT_USER',
-                    'DATABASE',
-                    'DAYNAME',
-                    'DES_DECRYPT',
-                    'DES_ENCRYPT',
-                    'ENCRYPT',
-                    'HEX',
-                    'INET6_NTOA',
-                    'INET_NTOA',
-                    'LOAD_FILE',
-                    'LOWER',
-                    'LTRIM',
-                    'MD5',
-                    'MONTHNAME',
-                    'OLD_PASSWORD',
-                    'PASSWORD',
-                    'QUOTE',
-                    'REVERSE',
-                    'RTRIM',
-                    'SHA1',
-                    'SHA2',
-                    'SOUNDEX',
-                    'SPACE',
-                    'TRIM',
-                    'UNCOMPRESS',
-                    'UNHEX',
-                    'UPPER',
-                    'USER',
-                    'UUID',
-                    'VERSION',
-                ];
+                $ret = $CLASS_CHAR;
 
                 if (($isMariaDB && $serverVersion < 100012) || $serverVersion < 50603) {
-                    $ret = array_diff($ret, ['INET6_NTOA']);
+                    $ret = array_diff($CLASS_CHAR, ['INET6_NTOA']);
                 }
 
                 return array_values($ret);
 
             case 'DATE':
-                return [
-                    'CURRENT_DATE',
-                    'CURRENT_TIME',
-                    'DATE',
-                    'FROM_DAYS',
-                    'FROM_UNIXTIME',
-                    'LAST_DAY',
-                    'NOW',
-                    'SEC_TO_TIME',
-                    'SYSDATE',
-                    'TIME',
-                    'TIMESTAMP',
-                    'UTC_DATE',
-                    'UTC_TIME',
-                    'UTC_TIMESTAMP',
-                    'YEAR',
-                ];
+                return $CLASS_DATE;
 
             case 'NUMBER':
-                $ret = [
-                    'ABS',
-                    'ACOS',
-                    'ASCII',
-                    'ASIN',
-                    'ATAN',
-                    'BIT_LENGTH',
-                    'BIT_COUNT',
-                    'CEILING',
-                    'CHAR_LENGTH',
-                    'CONNECTION_ID',
-                    'COS',
-                    'COT',
-                    'CRC32',
-                    'DAYOFMONTH',
-                    'DAYOFWEEK',
-                    'DAYOFYEAR',
-                    'DEGREES',
-                    'EXP',
-                    'FLOOR',
-                    'HOUR',
-                    'INET6_ATON',
-                    'INET_ATON',
-                    'LENGTH',
-                    'LN',
-                    'LOG',
-                    'LOG2',
-                    'LOG10',
-                    'MICROSECOND',
-                    'MINUTE',
-                    'MONTH',
-                    'OCT',
-                    'ORD',
-                    'PI',
-                    'QUARTER',
-                    'RADIANS',
-                    'RAND',
-                    'ROUND',
-                    'SECOND',
-                    'SIGN',
-                    'SIN',
-                    'SQRT',
-                    'TAN',
-                    'TO_DAYS',
-                    'TO_SECONDS',
-                    'TIME_TO_SEC',
-                    'UNCOMPRESSED_LENGTH',
-                    'UNIX_TIMESTAMP',
-                    'UUID_SHORT',
-                    'WEEK',
-                    'WEEKDAY',
-                    'WEEKOFYEAR',
-                    'YEARWEEK',
-                ];
+                $ret = $CLASS_NUMBER;
 
                 if (($isMariaDB && $serverVersion < 100012) || $serverVersion < 50603) {
                     $ret = array_diff($ret, ['INET6_ATON']);
@@ -528,48 +467,10 @@ class Types
 
             case 'SPATIAL':
                 if ($serverVersion >= 50600) {
-                    return [
-                        'ST_GeomFromText',
-                        'ST_GeomFromWKB',
-
-                        'ST_GeomCollFromText',
-                        'ST_LineFromText',
-                        'ST_MLineFromText',
-                        'ST_PointFromText',
-                        'ST_MPointFromText',
-                        'ST_PolyFromText',
-                        'ST_MPolyFromText',
-
-                        'ST_GeomCollFromWKB',
-                        'ST_LineFromWKB',
-                        'ST_MLineFromWKB',
-                        'ST_PointFromWKB',
-                        'ST_MPointFromWKB',
-                        'ST_PolyFromWKB',
-                        'ST_MPolyFromWKB',
-                    ];
+                    return $CLASS_SPATIAL_NEW;
                 }
 
-                return [
-                    'GeomFromText',
-                    'GeomFromWKB',
-
-                    'GeomCollFromText',
-                    'LineFromText',
-                    'MLineFromText',
-                    'PointFromText',
-                    'MPointFromText',
-                    'PolyFromText',
-                    'MPolyFromText',
-
-                    'GeomCollFromWKB',
-                    'LineFromWKB',
-                    'MLineFromWKB',
-                    'PointFromWKB',
-                    'MPointFromWKB',
-                    'PolyFromWKB',
-                    'MPolyFromWKB',
-                ];
+                return $CLASS_SPATIAL_OLD;
         }
 
         return [];

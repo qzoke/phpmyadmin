@@ -1069,85 +1069,53 @@ class Util
     /**
      * Get the URL corresponding to a plain English config word
      * in order to append in links on navigation and main panel
-     *
      * @param string $target   a valid value for
      *                         $cfg['NavigationTreeDefaultTabTable'],
      *                         $cfg['NavigationTreeDefaultTabTable2'],
      *                         $cfg['DefaultTabTable'], $cfg['DefaultTabDatabase'] or
      *                         $cfg['DefaultTabServer']
      * @param string $location one out of 'server', 'table', 'database'
-     *
      * @return string The URL corresponding to the config word
      */
     public static function getUrlForOption(string $target, string $location): string
     {
         if ($location === 'server') {
+
             // Values for $cfg['DefaultTabServer']
-            switch ($target) {
-                case 'welcome':
-                case 'index.php':
-                    return '/';
+            return match ($target) {
+                'welcome', 'index.php' => '/',
+                'databases', 'server_databases.php' => '/server/databases',
+                'status', 'server_status.php' => '/server/status',
+                'variables', 'server_variables.php' => '/server/variables',
+                'privileges', 'server_privileges.php' => '/server/privileges',
+                default => '',
+            };
 
-                case 'databases':
-                case 'server_databases.php':
-                    return '/server/databases';
-
-                case 'status':
-                case 'server_status.php':
-                    return '/server/status';
-
-                case 'variables':
-                case 'server_variables.php':
-                    return '/server/variables';
-
-                case 'privileges':
-                case 'server_privileges.php':
-                    return '/server/privileges';
-            }
         } elseif ($location === 'database') {
+
             // Values for $cfg['DefaultTabDatabase']
-            switch ($target) {
-                case 'structure':
-                case 'db_structure.php':
-                    return '/database/structure';
+            return match ($target) {
+                'structure', 'db_structure.php' => '/database/structure',
+                'sql', 'db_sql.php' => '/database/sql',
+                'search', 'db_search.php' => '/database/search',
+                'operations', 'db_operations.php' => '/database/operations',
+                default => '',
+            };
 
-                case 'sql':
-                case 'db_sql.php':
-                    return '/database/sql';
-
-                case 'search':
-                case 'db_search.php':
-                    return '/database/search';
-
-                case 'operations':
-                case 'db_operations.php':
-                    return '/database/operations';
-            }
         } elseif ($location === 'table') {
+
             // Values for $cfg['DefaultTabTable'],
             // $cfg['NavigationTreeDefaultTabTable'] and
             // $cfg['NavigationTreeDefaultTabTable2']
-            switch ($target) {
-                case 'structure':
-                case 'tbl_structure.php':
-                    return '/table/structure';
+            return match ($target) {
+                'structure', 'tbl_structure.php' => '/table/structure',
+                'sql', 'tbl_sql.php' => '/table/sql',
+                'search', 'tbl_select.php' => '/table/search',
+                'insert', 'tbl_change.php' => '/table/change',
+                'browse', 'sql.php' => '/sql',
+                default => '',
+            };
 
-                case 'sql':
-                case 'tbl_sql.php':
-                    return '/table/sql';
-
-                case 'search':
-                case 'tbl_select.php':
-                    return '/table/search';
-
-                case 'insert':
-                case 'tbl_change.php':
-                    return '/table/change';
-
-                case 'browse':
-                case 'sql.php':
-                    return '/sql';
-            }
         }
 
         return '/';
